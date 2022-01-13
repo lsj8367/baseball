@@ -33,7 +33,7 @@ public class MatchGenerator {
         return count;
     }
 
-    public boolean isContainsNumber(final int i) {
+    private boolean isContainsNumber(final int i) {
         return (correctNumber.charAt(i) != inputNumber.charAt(i))
             && correctNumber.contains(String.valueOf(inputNumber.charAt(i)));
     }
