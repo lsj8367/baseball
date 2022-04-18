@@ -1,6 +1,7 @@
-package io.github.lsj8367;
+package io.github.lsj8367.domain;
 
 import static org.assertj.core.api.Assertions.assertThatCode;
+import io.github.lsj8367.domain.BaseBall;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
