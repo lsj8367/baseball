@@ -43,4 +43,8 @@ public class Result {
         return strike >= 1 && ball >= 1;
     }
 
+    public boolean isCorrect() {
+        return strike == 3;
+    }
+
 }
