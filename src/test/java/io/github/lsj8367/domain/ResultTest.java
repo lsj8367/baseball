@@ -15,6 +15,7 @@ class ResultTest {
     }
 
     @Test
+    @DisplayName("아웃인 경우")
     void outTest() {
         final Result result = new Result(0, 0, 3);
         assertThat(result.isOut()).isTrue();
