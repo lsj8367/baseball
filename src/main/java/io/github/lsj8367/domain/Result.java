@@ -1,34 +1,9 @@
 package io.github.lsj8367.domain;
 
-public class Result {
-
-    private final int strike;
-    private final int ball;
-    private final int out;
-
-    public Result(final int strike, final int ball, final int out) {
-        outValidation(strike, ball, out);
-        this.strike = strike;
-        this.ball = ball;
-        this.out = out;
-    }
-
-    private void outValidation(final int strike, final int ball, final int out) {
-        if (out == 0) {
-            return;
-        }
-
-        if (out != 3) {
-            throw new IllegalArgumentException("아웃 카운트는 3밖에 올 수 없습니다.");
-        }
-
-        if (strike != 0 || ball != 0) {
-            throw new IllegalArgumentException("아웃이 존재하는 경우 strike와 ball은 횟수가 있을 수 없습니다.");
-        }
-    }
+public record Result(int strike, int ball) {
 
     public boolean isOut() {
-        return out == 3 && strike == 0 && ball == 0;
+        return strike == 0 && ball == 0;
     }
 
     public boolean isOnlyStrike() {
@@ -45,6 +20,14 @@ public class Result {
 
     public boolean isCorrect() {
         return strike == 3;
+    }
+
+    public int getStrike() {
+        return strike;
+    }
+
+    public int getBall() {
+        return ball;
     }
 
 }
