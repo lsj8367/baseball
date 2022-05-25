@@ -1,10 +1,8 @@
 package io.github.lsj8367.c.refactoring.menuexamples;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import java.util.Arrays;
 import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 public class MenuAccessTest {
@@ -12,14 +10,14 @@ public class MenuAccessTest {
     @Test
     public void testSetAuthorizationsInEachMenus() {
 
-        Role[] userRoles = { new Role("MenuARead"), new Role("MenuBWrite"),
-                new Role("MenuCRead"), new Role("MenuCWrite") };
+        Role[] userRoles = {new Role("MenuARead"), new Role("MenuBWrite"),
+            new Role("MenuCRead"), new Role("MenuCWrite")};
 
         MenuItem[] menuItemsArray = {
-                new MenuItem("A", "MenuARead", "MenuAWrite"),
-                new MenuItem("B", "MenuBRead", "MenuBWrite"),
-                new MenuItem("C", "MenuCRead", "MenuCWrite"),
-                new MenuItem("D", "MenuDRead", "MenuDWrite")
+            new MenuItem("A", "MenuARead", "MenuAWrite"),
+            new MenuItem("B", "MenuBRead", "MenuBWrite"),
+            new MenuItem("C", "MenuCRead", "MenuCWrite"),
+            new MenuItem("D", "MenuDRead", "MenuDWrite")
         };
 
         List<MenuItem> menuItems = Arrays.asList(menuItemsArray);
@@ -45,4 +43,5 @@ public class MenuAccessTest {
         assertEquals(false, menuItemD.isVisible());
 
     }
+
 }

@@ -1,13 +1,13 @@
 package io.github.lsj8367.b.simple.design.business.customer;
 
+import io.github.lsj8367.b.simple.design.model.customer.Amount;
+import io.github.lsj8367.b.simple.design.model.customer.AmountImpl;
+import io.github.lsj8367.b.simple.design.model.customer.Currency;
+import io.github.lsj8367.b.simple.design.model.customer.Product;
 import java.math.BigDecimal;
 import java.util.List;
 
 import io.github.lsj8367.b.simple.design.business.exception.DifferentCurrenciesException;
-import com.b.simple.design.model.customer.Amount;
-import com.b.simple.design.model.customer.AmountImpl;
-import com.b.simple.design.model.customer.Currency;
-import com.b.simple.design.model.customer.Product;
 
 public class CustomerBOImpl implements CustomerBO {
 

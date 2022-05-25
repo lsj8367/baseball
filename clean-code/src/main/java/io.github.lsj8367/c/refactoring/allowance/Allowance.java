@@ -8,7 +8,7 @@ public class Allowance {
 
     BigDecimal allowanceValue;
 
-    public Allowance(int allowanceId , BigDecimal allowanceValue) {
+    public Allowance(int allowanceId, BigDecimal allowanceValue) {
         super();
         this.allowanceId = allowanceId;
         this.allowanceValue = allowanceValue;

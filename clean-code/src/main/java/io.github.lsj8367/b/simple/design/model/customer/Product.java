@@ -5,11 +5,12 @@ package io.github.lsj8367.b.simple.design.model.customer;
  */
 public interface Product {
 
-	long getId();
+    long getId();
 
-	String getName();
+    String getName();
 
-	ProductType getType();
+    ProductType getType();
 
-	Amount getAmount();
+    Amount getAmount();
+
 }

@@ -9,7 +9,7 @@ public class UserLoginChecker {
      * {@inheritDoc}.
      */
     public Lock isUserAllowedToLogin(long id, String status,
-            boolean firstScreen, User user, List list) {
+        boolean firstScreen, User user, List list) {
         Date time = new Date();
         Lock lck = new Lock();
         if (list.size() > 0 && list.get(0) != null) {
@@ -19,14 +19,14 @@ public class UserLoginChecker {
             if (userId != null) {
                 // message which is shown to the user 
                 String lockMsg = Constants.LOCK_TEXT.replaceAll("@@USER@@",
-                        userId);
+                    userId);
                 //if userID is present, the Lock time stamp will also be present
                 //4800000 milliseconds equals to 1 1/2 hours.
                 if (time.getTime() - lockTimestamp.getTime() > 3600000) {
                     //New user gets lock only on first screen 
                     //If 1 1/2 hours expires when user is not on 1st screen then for same user lock can be refreshed.
                     if (firstScreen
-                            || userId.equalsIgnoreCase(user.getUserId())) {
+                        || userId.equalsIgnoreCase(user.getUserId())) {
                         //to set the  access to write mode
                         lck.setRead(false);
                         return lck;
@@ -50,4 +50,5 @@ public class UserLoginChecker {
         lck.setRead(false);
         return lck;
     }
+
 }
