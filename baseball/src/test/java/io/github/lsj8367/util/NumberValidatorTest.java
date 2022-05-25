@@ -23,7 +23,7 @@ class NumberValidatorTest {
     void lengthValid() {
         assertThatThrownBy(() -> NumberValidator.validation("12314"))
             .isInstanceOf(IllegalArgumentException.class)
-            .hasMessage("숫자 길이는 3글자여야 합니다.");
+            .hasMessage("숫자는 중복되지 않는 3자리여야 합니다.");
     }
 
     @Test
