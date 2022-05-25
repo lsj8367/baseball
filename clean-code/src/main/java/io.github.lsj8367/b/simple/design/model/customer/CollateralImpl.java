@@ -5,42 +5,43 @@ package io.github.lsj8367.b.simple.design.model.customer;
  */
 public class CollateralImpl implements Collateral {
 
-	private long id;
+    private long id;
 
-	private String name;
+    private String name;
 
-	private CollateralType type;
+    private CollateralType type;
 
-	public CollateralImpl(long id, String name, CollateralType type) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.type = type;
-	}
+    public CollateralImpl(long id, String name, CollateralType type) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.type = type;
+    }
 
-	public long getId() {
-		return id;
-	}
+    public long getId() {
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public CollateralType getType() {
-		return type;
-	}
+    @Override
+    public CollateralType getType() {
+        return type;
+    }
 
-	public void setType(CollateralType type) {
-		this.type = type;
-	}
+    public void setType(CollateralType type) {
+        this.type = type;
+    }
+
 }

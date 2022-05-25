@@ -5,9 +5,10 @@ package io.github.lsj8367.b.simple.design.model.customer;
  */
 public interface Collateral {
 
-	long getId();
+    long getId();
 
-	String getName();
+    String getName();
 
-	CollateralType getType();
+    CollateralType getType();
+
 }

@@ -5,55 +5,56 @@ package io.github.lsj8367.b.simple.design.model.customer;
  */
 public class ProductImpl implements Product {
 
-	private long id;
+    private long id;
 
-	private String name;
+    private String name;
 
-	private ProductType type;
+    private ProductType type;
 
-	private Amount amount;
+    private Amount amount;
 
-	public ProductImpl(long id, String name, ProductType type, Amount amount) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.type = type;
-		this.amount = amount;
-	}
+    public ProductImpl(long id, String name, ProductType type, Amount amount) {
+        super();
+        this.id = id;
+        this.name = name;
+        this.type = type;
+        this.amount = amount;
+    }
 
-	@Override
-	public long getId() {
-		return id;
-	}
+    @Override
+    public long getId() {
+        return id;
+    }
 
-	public void setId(long id) {
-		this.id = id;
-	}
+    public void setId(long id) {
+        this.id = id;
+    }
 
-	@Override
-	public String getName() {
-		return name;
-	}
+    @Override
+    public String getName() {
+        return name;
+    }
 
-	public void setName(String name) {
-		this.name = name;
-	}
+    public void setName(String name) {
+        this.name = name;
+    }
 
-	@Override
-	public ProductType getType() {
-		return type;
-	}
+    @Override
+    public ProductType getType() {
+        return type;
+    }
 
-	public void setType(ProductType type) {
-		this.type = type;
-	}
+    public void setType(ProductType type) {
+        this.type = type;
+    }
 
-	@Override
-	public Amount getAmount() {
-		return amount;
-	}
+    @Override
+    public Amount getAmount() {
+        return amount;
+    }
 
-	public void setAmount(Amount amount) {
-		this.amount = amount;
-	}
+    public void setAmount(Amount amount) {
+        this.amount = amount;
+    }
+
 }

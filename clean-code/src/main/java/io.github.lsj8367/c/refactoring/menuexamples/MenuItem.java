@@ -12,15 +12,15 @@ public class MenuItem {
     boolean visible;
     String writeAccessRole;
 
-    public MenuItem(String name ,
-            boolean visible , List<MenuItem> childMenus) {
+    public MenuItem(String name,
+        boolean visible, List<MenuItem> childMenus) {
         super();
         this.name = name;
         this.visible = visible;
         this.childMenus = childMenus;
     }
 
-    public MenuItem(String name , String readAccessRole , String writeAccessRole) {
+    public MenuItem(String name, String readAccessRole, String writeAccessRole) {
         super();
         this.name = name;
         this.readAccessRole = readAccessRole;
@@ -79,10 +79,10 @@ public class MenuItem {
     public String toString() {
         StringBuilder builder = new StringBuilder();
         builder.append("MenuItem [readAccessRole=").append(readAccessRole)
-                .append(", writeAccessRole=").append(writeAccessRole)
-                .append(", access=").append(access).append(", visible=")
-                .append(visible).append(", childMenus=").append(childMenus)
-                .append("]");
+            .append(", writeAccessRole=").append(writeAccessRole)
+            .append(", access=").append(access).append(", visible=")
+            .append(visible).append(", childMenus=").append(childMenus)
+            .append("]");
         return builder.toString();
     }
 

@@ -10,13 +10,13 @@ public class Log {
     }
 
     public static void logApplicationDebug(String string,
-            Class<? extends Object> class1) {
+        Class<? extends Object> class1) {
         // TODO Auto-generated method stub
 
     }
 
     public static void logApplicationInfo(String string,
-            BigDecimal allowanceDiff, Class<? extends Object> class1) {
+        BigDecimal allowanceDiff, Class<? extends Object> class1) {
 
     }
 

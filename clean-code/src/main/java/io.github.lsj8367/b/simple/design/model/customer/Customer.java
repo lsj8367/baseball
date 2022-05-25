@@ -8,18 +8,18 @@ import java.util.List;
  */
 public interface Customer {
 
-	long getId();
+    long getId();
 
-	String getName();
+    String getName();
 
-	Enum<?> getType();
+    Enum<?> getType();
 
-	List<Collateral> getCollaterals();
+    List<Collateral> getCollaterals();
 
-	List<Product> getProducts();
+    List<Product> getProducts();
 
-	void setProductAmount(BigDecimal productAmount);
+    void setProductAmount(BigDecimal productAmount);
 
-	BigDecimal getProductAmount();
+    BigDecimal getProductAmount();
 
 }

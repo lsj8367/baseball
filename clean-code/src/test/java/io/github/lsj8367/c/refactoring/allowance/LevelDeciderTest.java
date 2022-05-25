@@ -15,8 +15,8 @@ public class LevelDeciderTest {
         File file = new File();
         file.setPrevFileVersionStatus("TEST_VALUE_NOT_CLOSED");
         assertEquals(Constants.LEVEL_D1, levelDecider.determineLevel(
-                file, 10, new Allowance(10, new BigDecimal(1000.00)),
-                new BigDecimal(1100.00)));
+            file, 10, new Allowance(10, new BigDecimal(1000.00)),
+            new BigDecimal(1100.00)));
     }
 
     @Test
@@ -24,8 +24,8 @@ public class LevelDeciderTest {
         File file = new File();
         file.setPrevFileVersionStatus("TEST_VALUE_NOT_AFK");
         assertEquals(Constants.LEVEL_D2, levelDecider.determineLevel(
-                file, 10, new Allowance(10, new BigDecimal(4200000.00)),
-                new BigDecimal(5000000.00)));
+            file, 10, new Allowance(10, new BigDecimal(4200000.00)),
+            new BigDecimal(5000000.00)));
     }
 
     @Test
@@ -33,8 +33,8 @@ public class LevelDeciderTest {
         File file = new File();
         file.setPrevFileVersionStatus("TEST_VALUE_NOT_CLOSED");
         assertEquals(Constants.LEVEL_D1, levelDecider.determineLevel(
-                file, 10, new Allowance(10, new BigDecimal(4600000.00)),
-                new BigDecimal(5000000.00)));
+            file, 10, new Allowance(10, new BigDecimal(4600000.00)),
+            new BigDecimal(5000000.00)));
     }
 
     @Test
@@ -42,8 +42,8 @@ public class LevelDeciderTest {
         File file = new File();
         file.setPrevFileVersionStatus("TEST_VALUE_NOT_CLOSED");
         assertEquals(Constants.LEVEL_D1, levelDecider.determineLevel(
-                file, 10, new Allowance(10, new BigDecimal(1000.00)),
-                new BigDecimal(1000.00)));
+            file, 10, new Allowance(10, new BigDecimal(1000.00)),
+            new BigDecimal(1000.00)));
 
     }
 
@@ -52,8 +52,8 @@ public class LevelDeciderTest {
         File file = new File();
         file.setPrevFileVersionStatus(Constants.FILE_STATUS_CLOSED);
         assertEquals(Constants.LEVEL_D2,
-                levelDecider.determineLevel(file, 10,
-                        null, null));
+            levelDecider.determineLevel(file, 10,
+                null, null));
     }
 
     @Test
@@ -61,7 +61,7 @@ public class LevelDeciderTest {
         File file = new File();
         file.setPrevFileVersionStatus("TEST_VALUE_NOT_CLOSED");
         assertEquals(Constants.LEVEL_D2,
-                levelDecider.determineLevel(file, 10, null, null));
+            levelDecider.determineLevel(file, 10, null, null));
     }
 
 }
