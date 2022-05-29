@@ -1,8 +1,6 @@
 package io.github.lsj8367.a.introduction.gildedrose;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +41,7 @@ class GildedRoseADefaultItemRefactoredTest {
     }
 
     private GildedRose createGildedRose(final String itemName, final int sellIn, final int quality) {
-        Item item = new Item(DEFAULT_ITEM, sellIn, quality);
+        Item item = new Item(itemName, sellIn, quality);
         Item[] items = new Item[]{item};
         return new GildedRose(items);
     }
