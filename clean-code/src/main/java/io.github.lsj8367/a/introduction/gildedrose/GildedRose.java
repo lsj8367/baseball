@@ -6,22 +6,8 @@ class GildedRose {
 
     Item[] items;
 
-    public GildedRose(Item[] items) {
+    public GildedRose(final Item[] items) {
         this.items = items;
-    }
-
-    public static void main(String[] args) {
-
-        Item[] items = new Item[]{
-            new Item("Default Item", 10, 20)
-        };
-
-        GildedRose app = new GildedRose(items);
-
-        app.updateQuality();
-
-        System.out.println(app);
-
     }
 
     public void updateQuality() {
