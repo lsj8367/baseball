@@ -1,6 +1,6 @@
 package io.github.lsj8367.a.introduction.gildedrose;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -35,9 +35,9 @@ class GildedRoseADefaultItemRefactoredTest {
     }
 
     private void assertItem(final Item actual, final Item expected) {
-        assertEquals(expected.name, actual.name);
-        assertEquals(expected.sellIn, actual.sellIn);
-        assertEquals(expected.quality, actual.quality);
+        assertThat(actual.name).isEqualTo(expected.name);
+        assertThat(actual.sellIn).isEqualTo(expected.sellIn);
+        assertThat(actual.quality).isEqualTo(expected.quality);
     }
 
     private GildedRose createGildedRose(final String itemName, final int sellIn, final int quality) {
