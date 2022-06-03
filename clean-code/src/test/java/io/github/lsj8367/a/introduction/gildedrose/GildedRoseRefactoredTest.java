@@ -12,6 +12,10 @@ class GildedRoseRefactoredTest {
     private static final int DEFAULT_QUALITY = 4;
     public static final String AGED_BRIE = "Aged Brie";
     public static final int MAX_QUALITY = 50;
+    public static final String BACKSTAGE_PASSES = "Backstage passes to a TAFKAL80ETC concert";
+    public static final int SELL_IN_MORE_THAN_10_DAYS = 15;
+    public static final int SELL_IN_MORE_5_LESS_10_DAYS = 9;
+    public static final int SELL_IN_LESS_5_DAYS = 4;
 
     @Test
     @DisplayName("아이템이 만료되지 않은 경우 판매갯수가 1이상이면 판매 1 감소, 품질 1 감소")
@@ -66,6 +70,50 @@ class GildedRoseRefactoredTest {
 
         Item actual = app.items[0];
         Item expected = new Item(AGED_BRIE, NOT_EXPIRED_SELL_IN - 1, MAX_QUALITY);
+        assertItem(actual, expected);
+    }
+
+    @Test
+    @DisplayName("sellin이 10일 이상이면 quality 1증가")
+    void backStageMoreThan10DaysQualityPlus2() {
+        GildedRose app = createGildedRoseOneItem(BACKSTAGE_PASSES, SELL_IN_MORE_THAN_10_DAYS, DEFAULT_QUALITY);
+        app.updateQuality();
+
+        Item actual = app.items[0];
+        Item expected = new Item(BACKSTAGE_PASSES, SELL_IN_MORE_THAN_10_DAYS - 1, DEFAULT_QUALITY + 1);
+        assertItem(actual, expected);
+    }
+
+    @Test
+    @DisplayName("sellin이 5일 이상 10일 이하이면 quality 2증가")
+    void backStageMore5Less10DaysQualityPlus2() {
+        GildedRose app = createGildedRoseOneItem(BACKSTAGE_PASSES, SELL_IN_MORE_5_LESS_10_DAYS, DEFAULT_QUALITY);
+        app.updateQuality();
+
+        Item actual = app.items[0];
+        Item expected = new Item(BACKSTAGE_PASSES, SELL_IN_MORE_5_LESS_10_DAYS - 1, DEFAULT_QUALITY + 2);
+        assertItem(actual, expected);
+    }
+
+    @Test
+    @DisplayName("sellin이 5일 이하이면 quality 3증가")
+    void backStageLess5DaysQualityPlus3() {
+        GildedRose app = createGildedRoseOneItem(BACKSTAGE_PASSES, SELL_IN_LESS_5_DAYS, DEFAULT_QUALITY);
+        app.updateQuality();
+
+        Item actual = app.items[0];
+        Item expected = new Item(BACKSTAGE_PASSES, SELL_IN_LESS_5_DAYS - 1, DEFAULT_QUALITY + 3);
+        assertItem(actual, expected);
+    }
+
+    @Test
+    @DisplayName("sellin이 만료 됐으면 quality 0")
+    void expiredBackStageQualityZero() {
+        GildedRose app = createGildedRoseOneItem(BACKSTAGE_PASSES, EXPIRED_SELL_IN, DEFAULT_QUALITY);
+        app.updateQuality();
+
+        Item actual = app.items[0];
+        Item expected = new Item(BACKSTAGE_PASSES, EXPIRED_SELL_IN - 1, 0);
         assertItem(actual, expected);
     }
 
