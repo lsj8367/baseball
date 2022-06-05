@@ -11,64 +11,47 @@ class GildedRose {
     }
 
     public void updateQuality() {
-        for (int i = 0; i < items.length; i++) {
-            if (items[i].name != "Aged Brie" && items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
-                if (items[i].quality > 0) {
-                    if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                        items[i].quality = items[i].quality - 1;
-                    }
-                }
-            } else {
-                // This part handles the items for which quality can increase
-                // "Backstage passes to a TAFKAL80ETC concert" and "Aged Brie"
-
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
-
-                    if (items[i].name == "Backstage passes to a TAFKAL80ETC concert") {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
+        for (final Item item : items) {
+            agedBrieOrBackStagePasses(item);
 
             // Everything except for Sulfuras the sellIn Decreases
-            if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                items[i].sellIn = items[i].sellIn - 1;
-            }
+            item.isNotEqualSulfurasThenSellinMinus1();
 
-            if (items[i].sellIn < 0) {
-                if (items[i].name != "Aged Brie") {
-
-                    if (items[i].name != "Backstage passes to a TAFKAL80ETC concert") {
-                        if (items[i].quality > 0) {
-                            if (items[i].name != "Sulfuras, Hand of Ragnaros") {
-                                items[i].quality = items[i].quality - 1;
-                            }
-                        }
-                    } else {
-                        // For Backstage passes with sellin less than zero
-                        // quality is set to zero
-                        items[i].quality = 0;
-                    }
-                } else {
-                    // For Aged Brie below 50 quality increases actually by 2
-                    // In the previous line
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
-                    }
-                }
+            if (item.isExpired()) {
+                isNameAgedBrieThenQualityPlus(item);
             }
         }
+    }
+
+    private void isNameAgedBrieThenQualityPlus(final Item item) {
+        if (item.isNotEqualAgedBrie()) {
+            backStagePassesThenQualityZero(item);
+            return;
+        }
+        // For Aged Brie below 50 quality increases actually by 2
+        // In the previous line
+        item.isNotMaxQualityThenAddQuality();
+    }
+
+    private void backStagePassesThenQualityZero(final Item item) {
+        if (item.isNotEqualBackStagePasses()) {
+            item.isNotEqualSulfurasThenQualityMinus1();
+            return;
+        }
+        // For Backstage passes with sellin less than zero
+        // quality is set to zero
+        item.zeroQuality();
+    }
+
+    private void agedBrieOrBackStagePasses(final Item item) {
+        if (item.isNotEqualAgedBrie() && item.isNotEqualBackStagePasses()) {
+            item.isNotEqualSulfurasThenQualityMinus1();
+            return;
+        }
+
+        // This part handles the items for which quality can increase
+        // "Backstage passes to a TAFKAL80ETC concert" and "Aged Brie"
+        item.isBackStageThenIncreaseByCondition();
     }
 
     @Override
