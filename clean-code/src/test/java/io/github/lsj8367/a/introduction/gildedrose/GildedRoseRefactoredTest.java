@@ -124,9 +124,9 @@ class GildedRoseRefactoredTest {
     }
 
     private void assertItem(final Item actual, final Item expected) {
-        assertThat(actual.name).isEqualTo(expected.name);
-        assertThat(actual.sellIn).isEqualTo(expected.sellIn);
-        assertThat(actual.quality).isEqualTo(expected.quality);
+        assertThat(actual.getName()).isEqualTo(expected.getName());
+        assertThat(actual.getSellIn()).isEqualTo(expected.getSellIn());
+        assertThat(actual.getQuality()).isEqualTo(expected.getQuality());
     }
 
 }

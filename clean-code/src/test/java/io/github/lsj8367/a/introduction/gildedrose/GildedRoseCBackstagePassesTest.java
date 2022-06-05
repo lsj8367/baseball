@@ -1,7 +1,6 @@
 package io.github.lsj8367.a.introduction.gildedrose;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Test;
 
 public class GildedRoseCBackstagePassesTest {
@@ -13,9 +12,9 @@ public class GildedRoseCBackstagePassesTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Backstage passes to a TAFKAL80ETC concert",
-            app.items[0].name);
-        assertEquals(14, app.items[0].sellIn);
-        assertEquals(4, app.items[0].quality);
+            app.items[0].getName());
+        assertEquals(14, app.items[0].getSellIn());
+        assertEquals(4, app.items[0].getQuality());
     }
 
     @Test
@@ -25,9 +24,9 @@ public class GildedRoseCBackstagePassesTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Backstage passes to a TAFKAL80ETC concert",
-            app.items[0].name);
-        assertEquals(6, app.items[0].sellIn);
-        assertEquals(5, app.items[0].quality);
+            app.items[0].getName());
+        assertEquals(6, app.items[0].getSellIn());
+        assertEquals(5, app.items[0].getQuality());
     }
 
     @Test
@@ -37,9 +36,9 @@ public class GildedRoseCBackstagePassesTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
         assertEquals("Backstage passes to a TAFKAL80ETC concert",
-            app.items[0].name);
-        assertEquals(3, app.items[0].sellIn);
-        assertEquals(6, app.items[0].quality);
+            app.items[0].getName());
+        assertEquals(3, app.items[0].getSellIn());
+        assertEquals(6, app.items[0].getQuality());
     }
 
 }

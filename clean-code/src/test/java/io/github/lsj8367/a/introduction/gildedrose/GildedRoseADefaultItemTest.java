@@ -16,9 +16,9 @@ public class GildedRoseADefaultItemTest {
         Item[] items = new Item[]{item};
         GildedRose app = new GildedRose(items);
         app.updateQuality();
-        assertEquals("DEFAULT_ITEM", app.items[0].name);
-        assertEquals(14, app.items[0].sellIn);
-        assertEquals(2, app.items[0].quality);
+        assertEquals("DEFAULT_ITEM", app.items[0].getName());
+        assertEquals(14, app.items[0].getSellIn());
+        assertEquals(2, app.items[0].getQuality());
     }
 
     /**
@@ -32,9 +32,9 @@ public class GildedRoseADefaultItemTest {
         Item[] items = new Item[]{item};
         GildedRose app = new GildedRose(items);
         app.updateQuality();
-        assertEquals("DEFAULT_ITEM", app.items[0].name);
-        assertEquals(-2, app.items[0].sellIn);
-        assertEquals(1, app.items[0].quality);
+        assertEquals("DEFAULT_ITEM", app.items[0].getName());
+        assertEquals(-2, app.items[0].getSellIn());
+        assertEquals(1, app.items[0].getQuality());
     }
 
 }
