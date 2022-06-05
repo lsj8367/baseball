@@ -20,18 +20,6 @@ public class Item {
         this.quality = quality;
     }
 
-    public void addQuality() {
-        quality += 1;
-    }
-
-    public void minusQuality() {
-        quality -= 1;
-    }
-
-    public void minusSellin() {
-        sellIn -= 1;
-    }
-
     public void zeroQuality() {
         quality = 0;
     }
@@ -57,30 +45,27 @@ public class Item {
             return;
         }
 
-        backStageCondition();
+        quality += backStageCondition();
     }
 
     private boolean isLessThanMaxValue() {
         return quality < 50;
     }
 
-    private void backStageCondition() {
+    private int backStageCondition() {
         if (isNotEqualBackStagePasses()) {
-            addQuality();
-            return;
+            return 1;
         }
 
         if (5 <= sellIn && sellIn <= 10) {
-            quality += 2;
-            return;
+            return 2;
         }
 
         if (sellIn < 5) {
-            quality += 3;
-            return;
+            return 3;
         }
 
-        addQuality();
+        return 1;
     }
 
     public boolean isExpired() {
@@ -91,6 +76,18 @@ public class Item {
         if (isLessThanMaxValue()) {
             addQuality();
         }
+    }
+
+    private void addQuality() {
+        quality += 1;
+    }
+
+    private void minusQuality() {
+        quality -= 1;
+    }
+
+    private void minusSellin() {
+        sellIn -= 1;
     }
 
     private boolean isNotEqualSulfuras() {
