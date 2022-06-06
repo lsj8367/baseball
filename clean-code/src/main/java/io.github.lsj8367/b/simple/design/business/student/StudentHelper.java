@@ -2,20 +2,25 @@ package io.github.lsj8367.b.simple.design.business.student;
 
 public class StudentHelper {
 
+    private static final int GRADE_B_LOWER_LIMIT = 51;
+    private static final int GRADE_B_UPPER_LIMIT = 80;
+    private static final int ADD_GRADE_A = 10;
+
     /* PROBLEM 1 */
-    /*
+
+    /**
      * You get a grade B if marks are between 51 and 80 (both inclusive). Except for Maths where the upper limit is increased by 10.
      */
     public boolean isGradeB(int marks, boolean isMaths) {
-        return isMaths ? marks >= 51 && marks <= 90 : marks >= 51 && marks <= 80;
+
+        int addNumber = isMaths ? ADD_GRADE_A : 0;
+
+        int upperLimit = GRADE_B_UPPER_LIMIT + addNumber;
+
+        return marks >= GRADE_B_LOWER_LIMIT && marks <= upperLimit;
     }
 
     /* PROBLEM 2 */
-	/*
-	You are awarded a grade based on your marks.
-	Grade A = 91 to 100, Grade B = 51 to 90, Otherwise Grade C
-	Except for Maths where marks to get a Grade are 5 higher than required for other subjects.
-	*/
 
     public String getGrade(int mark, boolean isMaths) {
         String grade = "C";
@@ -29,14 +34,12 @@ public class StudentHelper {
     }
 
     private boolean isGradeA(int mark, boolean isMaths) {
-        int lowerLimitForAGrade = isMaths ? 95
-            : 90;
+        int lowerLimitForAGrade = isMaths ? 95 : 90;
         return mark > lowerLimitForAGrade;
     }
 
     private boolean isBGrade(int mark, boolean isMaths) {
-        int lowerLimitGradeB = isMaths ? 55
-            : 50;
+        int lowerLimitGradeB = isMaths ? 55 : 50;
         return mark > lowerLimitGradeB && mark < 90;
     }
 
@@ -57,14 +60,12 @@ public class StudentHelper {
      */
 
     public String willQualifyForQuiz(int marks1, int marks2, boolean isMaths) {
-			if ((isMaths ? marks1 <= 25 : marks1 <= 20)
-				|| (isMaths ? marks2 <= 25 : marks2 <= 20)) {
-				return "NO";
-			}
-			if ((isMaths ? marks1 >= 85 : marks1 >= 80)
-				|| (isMaths ? marks2 >= 85 : marks2 >= 80)) {
-				return "YES";
-			}
+        if ((isMaths ? marks1 <= 25 : marks1 <= 20) || (isMaths ? marks2 <= 25 : marks2 <= 20)) {
+            return "NO";
+        }
+        if ((isMaths ? marks1 >= 85 : marks1 >= 80) || (isMaths ? marks2 >= 85 : marks2 >= 80)) {
+            return "YES";
+        }
         return "MAYBE";
     }
 
