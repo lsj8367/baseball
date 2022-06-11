@@ -5,6 +5,7 @@ public class StudentHelper {
     private static final int GRADE_B_LOWER_LIMIT = 51;
     private static final int GRADE_B_UPPER_LIMIT = 80;
     private static final int ADD_GRADE_A = 10;
+    public static final int GRADE_A = 91;
 
     /* PROBLEM 1 */
 
@@ -22,28 +23,24 @@ public class StudentHelper {
 
     /* PROBLEM 2 */
 
-    public String getGrade(int mark, boolean isMaths) {
-        String grade = "C";
+    /**
+     * You are awarded a grade based on your marks. Grade A = 91 to 100, Grade B = 51 to 90, Otherwise Grade C Except for Maths where marks to get a Grade are 5 higher than required for other subjects.
+     */
+    public String getGrade(int mark, boolean isMath) {
+        int mathScore = isMath ? 5 : 0;
 
-			if (isGradeA(mark, isMaths)) {
-				grade = "A";
-			} else if (isBGrade(mark, isMaths)) {
-				grade = "B";
-			}
-        return grade;
+        if (mark >= GRADE_A + mathScore) {
+            return "A";
+        }
+
+        if (mark >= GRADE_B_LOWER_LIMIT + mathScore) {
+            return "B";
+        }
+
+        return "C";
     }
 
-    private boolean isGradeA(int mark, boolean isMaths) {
-        int lowerLimitForAGrade = isMaths ? 95 : 90;
-        return mark > lowerLimitForAGrade;
-    }
-
-    private boolean isBGrade(int mark, boolean isMaths) {
-        int lowerLimitGradeB = isMaths ? 55 : 50;
-        return mark > lowerLimitGradeB && mark < 90;
-    }
-
-    /*  PROBLEM 3
+    /**  PROBLEM 3
      * You and your Friend are planning to enter a Subject Quiz.
      * However, there is a marks requirement that you should attain to qualify.
      *
