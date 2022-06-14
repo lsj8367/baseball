@@ -1,8 +1,14 @@
 package io.github.lsj8367.b.simple.design.business.text;
 
+import java.util.Objects;
+
 public class TextHelper {
 
-    public String swapLastTwoCharacters(String str) {
+    public String swapLastTwoCharacters(final String str) {
+        if (Objects.isNull(str)) {
+            throw new IllegalArgumentException("문자열은 비어있을 수 없습니다.");
+        }
+
         if (str.length() < 2) {
             return str;
         }

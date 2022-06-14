@@ -1,6 +1,7 @@
 package io.github.lsj8367.b.simple.design.business.text;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
@@ -9,6 +10,14 @@ import org.junit.jupiter.api.Test;
 class TextHelperTest {
 
     private TextHelper helper = new TextHelper();
+
+    @Test
+    @DisplayName("문자열을 null 넣을 시 에러 발생")
+    void nullStrTest() {
+        assertThatThrownBy(() -> helper.swapLastTwoCharacters(null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("문자열은 비어있을 수 없습니다.");
+    }
 
     @Test
     @DisplayName("빈문자열이면 자기자신을 반환")
