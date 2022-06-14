@@ -1,13 +1,12 @@
 package io.github.lsj8367.b.simple.design.business.text;
 
+import java.util.Locale;
 import java.util.Objects;
 
 public class TextHelper {
 
     public String swapLastTwoCharacters(final String str) {
-        if (Objects.isNull(str)) {
-            throw new IllegalArgumentException("문자열은 비어있을 수 없습니다.");
-        }
+        inputValidation(str);
 
         if (str.length() < 2) {
             return str;
@@ -21,8 +20,30 @@ public class TextHelper {
         return front2Chars + back + front;
     }
 
-    public String truncateAInFirst2Positions(String str) {
-        return null;
+    private void inputValidation(final String str) {
+        if (Objects.isNull(str)) {
+            throw new IllegalArgumentException("문자열은 비어있을 수 없습니다.");
+        }
+    }
+
+    public String truncateAInFirst2Positions(final String str) {
+        inputValidation(str);
+
+        final String upperStr = str.toUpperCase(Locale.ROOT);
+
+        if (upperStr.length() < 2) {
+            return removeA(upperStr);
+        }
+
+        final String front2Str = upperStr.substring(0, 2);
+
+        final String eraseAStr = removeA(front2Str);
+
+        return eraseAStr + upperStr.substring(2);
+    }
+
+    private String removeA(final String input) {
+        return input.replace("A", "");
     }
 
 }
