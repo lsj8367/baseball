@@ -1,21 +1,37 @@
 package io.github.lsj8367.b.simple.design.business.text;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class TextHelperTest {
+class TextHelperTest {
 
-    TextHelper helper = new TextHelper();
+    private TextHelper helper = new TextHelper();
 
     @Test
-    @Disabled
-    public void testSwapLastTwoCharacters() {
-        assertEquals("", helper.swapLastTwoCharacters(""));
-        assertEquals("A", helper.swapLastTwoCharacters("A"));
-        assertEquals("BA", helper.swapLastTwoCharacters("AB"));
-        assertEquals("RANI", helper.swapLastTwoCharacters("RAIN"));
+    @DisplayName("빈문자열이면 자기자신을 반환")
+    void emptyStringReturnSelf() {
+        assertThat(helper.swapLastTwoCharacters("")).isEqualTo("");
+    }
+
+    @Test
+    @DisplayName("문자열 그대로 반환")
+    void returnSelfTest() {
+        assertThat(helper.swapLastTwoCharacters("A")).isEqualTo("A");
+    }
+
+    @Test
+    @DisplayName("길이가 2 이상이면 두 문자를 스왑")
+    void ifGreaterThan2ThenSwap() {
+        assertThat(helper.swapLastTwoCharacters("AB")).isEqualTo("BA");
+    }
+
+    @Test
+    @DisplayName("뒤의 2개의 문자만 스왑")
+    void back2CharSwap() {
+        assertThat(helper.swapLastTwoCharacters("RAIN")).isEqualTo("RANI");
     }
 
     @Test
