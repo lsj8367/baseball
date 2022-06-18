@@ -35,11 +35,6 @@ class CustomerBOTest {
         assertAmount(actual, new AmountImpl(new BigDecimal("11.0"), Currency.EURO));
     }
 
-    private void assertAmount(final Amount actual, final Amount expected) {
-        assertThat(actual.getCurrency()).isEqualTo(expected.getCurrency());
-        assertThat(actual.getValue()).isEqualTo(expected.getValue());
-    }
-
     @Test
     @DisplayName("전부 통화가 같지 않다면 예외 발생")
     void notAllMatchCurrencyExceptionTest() {
@@ -62,6 +57,11 @@ class CustomerBOTest {
         final Amount actual = customerBO.getCustomerProductsSum(products);
 
         assertAmount(actual, new AmountImpl(BigDecimal.ZERO, Currency.EURO));
+    }
+
+    private void assertAmount(final Amount actual, final Amount expected) {
+        assertThat(actual.getCurrency()).isEqualTo(expected.getCurrency());
+        assertThat(actual.getValue()).isEqualTo(expected.getValue());
     }
 
 }
