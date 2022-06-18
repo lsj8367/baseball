@@ -1,5 +1,6 @@
 package io.github.lsj8367.b.simple.design.business.customer;
 
+import io.github.lsj8367.b.simple.design.business.exception.DifferentCurrenciesException;
 import io.github.lsj8367.b.simple.design.model.customer.Amount;
 import io.github.lsj8367.b.simple.design.model.customer.AmountImpl;
 import io.github.lsj8367.b.simple.design.model.customer.Currency;
@@ -7,37 +8,41 @@ import io.github.lsj8367.b.simple.design.model.customer.Product;
 import java.math.BigDecimal;
 import java.util.List;
 
-import io.github.lsj8367.b.simple.design.business.exception.DifferentCurrenciesException;
-
 public class CustomerBOImpl implements CustomerBO {
 
-	@Override
-	public Amount getCustomerProductsSum(List<Product> products)
-			throws DifferentCurrenciesException {
-		BigDecimal temp = BigDecimal.ZERO;
+    @Override
+    public Amount getCustomerProductsSum(final List<Product> products) {
 
-		if (products.size() == 0)
-			return new AmountImpl(temp, Currency.EURO);
+        if (products.isEmpty()) {
+            return new AmountImpl(BigDecimal.ZERO, Currency.EURO);
+        }
 
-		// Throw Exception If Any of the product has a currency different from
-		// the first product
-		Currency firstProductCurrency = products.get(0).getAmount()
-				.getCurrency();
+        if (!allMatchFirstProduct(products)) {
+            throw new DifferentCurrenciesException();
+        }
 
-		for (Product product : products) {
-			boolean currencySameAsFirstProduct = product.getAmount()
-					.getCurrency().equals(firstProductCurrency);
-			if (!currencySameAsFirstProduct) {
-				throw new DifferentCurrenciesException();
-			}
-		}
+        return sumAmountProducts(products);
+    }
 
-		// Calculate Sum of Products
-		for (Product product : products) {
-			temp = temp.add(product.getAmount().getValue());
-		}
-		
-		// Create new product
-		return new AmountImpl(temp, firstProductCurrency);
-	}
+    private boolean allMatchFirstProduct(final List<Product> products) {
+        final Currency firstProductCurrency = products.get(0).getAmount()
+            .getCurrency();
+
+        return products.stream()
+            .map(product -> product.getAmount().getCurrency())
+            .allMatch(currency -> currency.equals(firstProductCurrency));
+    }
+
+    private AmountImpl sumAmountProducts(final List<Product> products) {
+        final Currency firstProductCurrency = products.get(0).getAmount()
+            .getCurrency();
+
+        final BigDecimal sum = products.stream()
+            .map(product -> product.getAmount().getValue())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        // Create new product
+        return new AmountImpl(sum, firstProductCurrency);
+    }
+
 }
