@@ -13,32 +13,37 @@ public class CustomerBOImpl implements CustomerBO {
     @Override
     public Amount getCustomerProductsSum(List<Product> products)
         throws DifferentCurrenciesException {
-        BigDecimal temp = BigDecimal.ZERO;
 
-        if (products.size() == 0) {
-            return new AmountImpl(temp, Currency.EURO);
+        if (products.isEmpty()) {
+            return new AmountImpl(BigDecimal.ZERO, Currency.EURO);
         }
 
-        // Throw Exception If Any of the product has a currency different from
-        // the first product
-        Currency firstProductCurrency = products.get(0).getAmount()
+        if (!allMatchFirstProduct(products)) {
+            throw new DifferentCurrenciesException();
+        }
+
+        return sumAmountProducts(products);
+    }
+
+    private boolean allMatchFirstProduct(final List<Product> products) {
+        final Currency firstProductCurrency = products.get(0).getAmount()
             .getCurrency();
 
-        for (Product product : products) {
-            boolean currencySameAsFirstProduct = product.getAmount()
-                .getCurrency().equals(firstProductCurrency);
-            if (!currencySameAsFirstProduct) {
-                throw new DifferentCurrenciesException();
-            }
-        }
+        return products.stream()
+            .map(product -> product.getAmount().getCurrency())
+            .allMatch(currency -> currency.equals(firstProductCurrency));
+    }
 
-        // Calculate Sum of Products
-        for (Product product : products) {
-            temp = temp.add(product.getAmount().getValue());
-        }
+    private AmountImpl sumAmountProducts(final List<Product> products) {
+        final Currency firstProductCurrency = products.get(0).getAmount()
+            .getCurrency();
+
+        final BigDecimal sum = products.stream()
+            .map(product -> product.getAmount().getValue())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
 
         // Create new product
-        return new AmountImpl(temp, firstProductCurrency);
+        return new AmountImpl(sum, firstProductCurrency);
     }
 
 }
