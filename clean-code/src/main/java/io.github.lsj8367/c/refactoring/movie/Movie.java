@@ -1,45 +1,39 @@
 package io.github.lsj8367.c.refactoring.movie;
 
 import io.github.lsj8367.c.refactoring.StringUtils;
+import java.util.List;
+import java.util.Objects;
 
-public class Movie {
+public record Movie(String rating) {
 
-    String rating;
-
-    public Movie(String rating) {
-        super();
-        this.rating = rating;
-    }
-
-    public String getRating() {
-        return rating;
-    }
+    private static final List<String> RATING_B_LIST = List.of(
+        "B1", "B2", "B3", "B4"
+    );
 
     /*Axx or By
     Where x represents any digit between 0 and 9, and y represents 
     any digit between 1 and 4*/
     public boolean isValidRating() {
-        if (this.getRating() != null) {
-            if (this.getRating().substring(0, 1).equalsIgnoreCase("B")
-                && this.getRating().length() == 2) {
-                if (StringUtils.isNumeric(this.getRating().substring(1, 2))
-                    && Integer.parseInt(this.getRating().substring(1, 2)) > 0
-                    && Integer.parseInt(this.getRating().substring(1, 2)) < 5) {
-                    return true;
-                }
-
-            } else if (this.getRating().substring(0, 1).equalsIgnoreCase("A")
-                && this.getRating().length() == 3
-                && StringUtils.isNumeric(this.getRating().substring(1, 3))) {
-                return true;
-            }
-
+        if (Objects.isNull(rating)) {
+            return false;
         }
-        return false;
+
+        if (isRatingB()) {
+            return true;
+        }
+
+        return isRatingA();
     }
 
-    public void setRating(String rating) {
-        this.rating = rating;
+    private boolean isRatingB() {
+        return RATING_B_LIST.contains(rating);
+    }
+
+    private boolean isRatingA() {
+        char frontChar = rating.charAt(0);
+        return frontChar == 'A'
+            && rating.length() == 3
+            && StringUtils.isNumeric(rating.substring(1, 3));
     }
 
 }
