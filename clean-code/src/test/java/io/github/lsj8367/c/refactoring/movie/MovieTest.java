@@ -1,29 +1,53 @@
 package io.github.lsj8367.c.refactoring.movie;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
+import static org.assertj.core.api.Assertions.assertThat;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
-public class MovieTest {
+class MovieTest {
 
     @Test
-    public void testIsValidRating() {
-        assertTrue(new Movie("B1").isValidRating());
-        assertTrue(new Movie("B2").isValidRating());
-        assertTrue(new Movie("B3").isValidRating());
-        assertTrue(new Movie("B4").isValidRating());
-        assertFalse(new Movie("B5").isValidRating());
-        assertFalse(new Movie("B10").isValidRating());
+    @DisplayName("null이면 false")
+    void isRatingNullTest() {
+        assertRatingFalse(null);
+    }
 
-        assertTrue(new Movie("A10").isValidRating());
-        assertTrue(new Movie("A11").isValidRating());
-        assertTrue(new Movie("A99").isValidRating());
+    @ParameterizedTest
+    @DisplayName("등급이 B 인경우 4까지만 등급 매기기 가능")
+    @ValueSource(strings = {"B1", "B2", "B3", "B4"})
+    void testIsValidRating(final String rating) {
+        assertRatingTrue(rating);
+    }
 
-        assertFalse(new Movie("A1").isValidRating());
-        assertFalse(new Movie("A2").isValidRating());
-        assertFalse(new Movie("A100").isValidRating());
-        assertFalse(new Movie("A786").isValidRating());
+    @ParameterizedTest
+    @DisplayName("등급이 B 인경우 5이상이면 false")
+    @ValueSource(strings = {"B5", "B10"})
+    void isValidRatingBSizeGreaterThan1(final String rating) {
+        assertRatingFalse(rating);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"A01", "A10", "A11", "A99"})
+    @DisplayName("등급이 A 인경우 뒤에 2자리만 가능")
+    void isRatingA(final String rating) {
+        assertRatingTrue(rating);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"A1", "A2", "A100", "A786"})
+    @DisplayName("등급이 A 지만 숫자가 두자리가 아닌 경우")
+    void isRatingAAndSizeNot2(final String rating) {
+        assertRatingFalse(rating);
+    }
+
+    private void assertRatingTrue(final String rating) {
+        assertThat(new Movie(rating).isValidRating()).isTrue();
+    }
+
+    private void assertRatingFalse(final String rating) {
+        assertThat(new Movie(rating).isValidRating()).isFalse();
     }
 
 }
