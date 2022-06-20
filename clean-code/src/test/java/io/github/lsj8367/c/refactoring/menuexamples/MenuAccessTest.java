@@ -1,47 +1,67 @@
 package io.github.lsj8367.c.refactoring.menuexamples;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import java.util.Arrays;
+import static org.assertj.core.api.Assertions.assertThat;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class MenuAccessTest {
+class MenuAccessTest {
+
+    private final Role[] readRoles = {new Role("MenuARead")};
+    private final Role[] writeRoles = {new Role("MenuAWrite")};
+    private List<MenuItem> menuItems;
+
+    @BeforeEach
+    void setUp() {
+        menuItems = List.of(
+            new MenuItem("A", "MenuARead", "MenuAWrite")
+        );
+    }
 
     @Test
-    public void testSetAuthorizationsInEachMenus() {
+    @DisplayName("권한이 없으면 null")
+    void roleIsNullEarlyReturn() {
+        final MenuAccess menuAccess = new MenuAccess(menuItems);
+        menuAccess.setAuthorizationsInEachMenus(null);
+        assertThat(menuItems.get(0).getAccess()).isNull();
+        assertThat(menuItems.get(0).isVisible()).isFalse();
+    }
 
-        Role[] userRoles = {new Role("MenuARead"), new Role("MenuBWrite"),
-            new Role("MenuCRead"), new Role("MenuCWrite")};
+    @Test
+    @DisplayName("Read 권한이 서로 같으면 정상적으로 변환")
+    void sameReadRoleThenChangeString() {
+        //given
+        final MenuAccess menuAccess = new MenuAccess(menuItems);
 
-        MenuItem[] menuItemsArray = {
-            new MenuItem("A", "MenuARead", "MenuAWrite"),
-            new MenuItem("B", "MenuBRead", "MenuBWrite"),
-            new MenuItem("C", "MenuCRead", "MenuCWrite"),
-            new MenuItem("D", "MenuDRead", "MenuDWrite")
-        };
+        //when
+        menuAccess.setAuthorizationsInEachMenus(readRoles);
 
-        List<MenuItem> menuItems = Arrays.asList(menuItemsArray);
+        //then
+        assertMenuItemRead(menuItems.get(0));
+    }
 
-        MenuAccess menuAccess = new MenuAccess();
+    @Test
+    @DisplayName("Read 권한이 서로 같으면 정상적으로 변환")
+    void sameWriteRoleThenChangeString() {
+        //given
+        final MenuAccess menuAccess = new MenuAccess(menuItems);
 
-        menuAccess.setAuthorizationsInEachMenus(menuItems, userRoles);
+        //when
+        menuAccess.setAuthorizationsInEachMenus(writeRoles);
 
-        MenuItem menuItemA = menuItems.get(0);
-        assertEquals(Constants.READ, menuItemA.getAccess());
-        assertEquals(true, menuItemA.isVisible());
+        //then
+        assertMenuItemWrite(menuItems.get(0));
+    }
 
-        MenuItem menuItemB = menuItems.get(1);
-        assertEquals(Constants.WRITE, menuItemB.getAccess());
-        assertEquals(true, menuItemB.isVisible());
+    private void assertMenuItemRead(final MenuItem menuItem) {
+        assertThat(menuItem.getAccess()).isEqualTo(Constants.READ);
+        assertThat(menuItem.isVisible()).isTrue();
+    }
 
-        MenuItem menuItemC = menuItems.get(2);
-        assertEquals(Constants.WRITE, menuItemC.getAccess());
-        assertEquals(true, menuItemC.isVisible());
-
-        MenuItem menuItemD = menuItems.get(3);
-        assertEquals(null, menuItemD.getAccess());
-        assertEquals(false, menuItemD.isVisible());
-
+    private void assertMenuItemWrite(final MenuItem menuItem) {
+        assertThat(menuItem.getAccess()).isEqualTo(Constants.WRITE);
+        assertThat(menuItem.isVisible()).isTrue();
     }
 
 }
