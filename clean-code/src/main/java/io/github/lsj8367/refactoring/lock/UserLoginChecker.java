@@ -2,7 +2,6 @@ package io.github.lsj8367.refactoring.lock;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Objects;
 
 public class UserLoginChecker {
@@ -10,14 +9,13 @@ public class UserLoginChecker {
     public static final long LOCK_FOR_THREE_HOURS = 1L;
 
     public Lock isUserAllowedToLogin(long id, String status,
-        boolean isFirstScreen, User loginUserRequest, List<Object> existingUsers) {
-        if (existingUsers.isEmpty()) {
+        boolean isFirstScreen, User loginUserRequest, final LockUser existingUsers) {
+        if (Objects.isNull(existingUsers)) {
             return writeLock();
         }
 
-        Object[] existingUser = (Object[]) existingUsers.get(0);
-        String lockUserId = (String) existingUser[0];
-        LocalDateTime lockTimestamp = (LocalDateTime) existingUser[1];
+        final String lockUserId = existingUsers.lockUserId();
+        final LocalDateTime lockTimestamp = existingUsers.lockTimeStamp();
 
         if (Objects.isNull(lockUserId)) {
             return writeLock();
