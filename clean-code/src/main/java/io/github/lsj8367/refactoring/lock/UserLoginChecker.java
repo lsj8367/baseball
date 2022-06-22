@@ -38,18 +38,12 @@ public class UserLoginChecker {
 
         // 사용자한테 표시되는 메시지
         final String lockMsg = Constants.LOCK_TEXT.replace("@@USER@@", lockUserId);
-        final Lock lock = new Lock();
-        lock.setRead(true);
-        // 읽기 잠금
-        lock.setLockReason(lockMsg);
-        return lock;
+        return Lock.readLockWithMessage(lockMsg, true);
     }
 
     private Lock writeLock() {
         // Locked By Same User, Write access
-        final Lock lock = new Lock();
-        lock.setRead(false);
-        return lock;
+        return Lock.writeLock(false);
     }
 
 }
