@@ -20,14 +20,6 @@ public class Lock {
         return new Lock(lockReason, readAccess);
     }
 
-    public String getLockReason() {
-        return lockReason;
-    }
-
-    public boolean isReadAccess() {
-        return readAccess;
-    }
-
     @Override
     public boolean equals(final Object o) {
         if (this == o) {
