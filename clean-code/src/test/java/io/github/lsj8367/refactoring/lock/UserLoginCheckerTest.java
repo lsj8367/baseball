@@ -1,12 +1,15 @@
-package io.github.lsj8367.c.refactoring.lock;
+package io.github.lsj8367.refactoring.lock;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import io.github.lsj8367.refactoring.lock.Lock;
+import io.github.lsj8367.refactoring.lock.User;
+import io.github.lsj8367.refactoring.lock.UserLoginChecker;
+import java.time.LocalDateTime;
 import java.util.Arrays;
-import java.util.Date;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -18,7 +21,7 @@ public class UserLoginCheckerTest {
     @Test
     @DisplayName("잠겨있는 사용자와 input UserId가 다른경우")
     public void testisUserAllowedToLogin_DifferentUserTriesImmediatelyAfter() {
-        Object[] access = new Object[]{"TEST_USER_ID_1", new Date()};
+        Object[] access = new Object[]{"TEST_USER_ID_1", LocalDateTime.now()};
         Lock lock = userLoginChecker.isUserAllowedToLogin(10, "NOT_USED", true, new User(
             "TEST_USER_ID_2"), Arrays.asList(new Object[][]{access}));
         assertTrue(lock.isReadAccess());
@@ -27,7 +30,7 @@ public class UserLoginCheckerTest {
 
     @Test
     public void testisUserAllowedToLogin_SameUserReturnsToFirstScreen() {
-        Object[] access = new Object[]{"TEST_USER_ID", new Date()};
+        Object[] access = new Object[]{"TEST_USER_ID", LocalDateTime.now()};
         Lock lock = userLoginChecker.isUserAllowedToLogin(10, "NOT_USED", true, new User(
             "TEST_USER_ID"), Arrays.asList(new Object[][]{access}));
         assertFalse(lock.isReadAccess());
@@ -36,7 +39,7 @@ public class UserLoginCheckerTest {
 
     @Test
     public void testisUserAllowedToLogin_SameUserReturnsToSecondScreen() {
-        Object[] access = new Object[]{"TEST_USER_ID", new Date()};
+        Object[] access = new Object[]{"TEST_USER_ID", LocalDateTime.now()};
         Lock lock = userLoginChecker.isUserAllowedToLogin(10, "NOT_USED", false, new User(
             "TEST_USER_ID"), Arrays.asList(new Object[][]{access}));
         assertFalse(lock.isReadAccess());
@@ -61,9 +64,8 @@ public class UserLoginCheckerTest {
         assertNotNull(lock.getLockReason());
     }
 
-    public Date threeHoursBefore() {
-        Date now = new Date();
-        return new Date(now.getTime() - 3 * 60 * 60 * 1000);
+    public LocalDateTime threeHoursBefore() {
+        return LocalDateTime.now().minusHours(3L);
     }
 
 }
