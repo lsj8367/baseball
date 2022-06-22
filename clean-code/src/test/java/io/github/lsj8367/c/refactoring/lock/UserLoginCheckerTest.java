@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.util.Arrays;
 import java.util.Date;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 public class UserLoginCheckerTest {
@@ -15,6 +16,7 @@ public class UserLoginCheckerTest {
     UserLoginChecker userLoginChecker = new UserLoginChecker();
 
     @Test
+    @DisplayName("잠겨있는 사용자와 input UserId가 다른경우")
     public void testisUserAllowedToLogin_DifferentUserTriesImmediatelyAfter() {
         Object[] access = new Object[]{"TEST_USER_ID_1", new Date()};
         Lock lock = userLoginChecker.isUserAllowedToLogin(10, "NOT_USED", true, new User(
