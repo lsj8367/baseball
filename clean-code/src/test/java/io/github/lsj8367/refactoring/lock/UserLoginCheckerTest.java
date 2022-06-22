@@ -20,7 +20,7 @@ class UserLoginCheckerTest {
 
     @Test
     void testisUserAllowedToLogin_SameUserReturnsToFirstScreen() {
-        Lock actual = userLoginChecker.isUserAllowedToLogin(true, new User(
+        final Lock actual = userLoginChecker.isUserAllowedToLogin(true, new User(
             "TEST_USER_ID"), new LockUser("TEST_USER_ID", LocalDateTime.now()));
         final Lock expected = Lock.writeLock(false);
         assertLock(actual, expected);
