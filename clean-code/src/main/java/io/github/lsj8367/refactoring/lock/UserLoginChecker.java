@@ -8,8 +8,7 @@ public class UserLoginChecker {
 
     public static final long LOCK_FOR_THREE_HOURS = 1L;
 
-    public Lock isUserAllowedToLogin(long id, String status,
-        boolean isFirstScreen, User loginUserRequest, final LockUser existingUsers) {
+    public Lock isUserAllowedToLogin(boolean isFirstScreen, User loginUserRequest, final LockUser existingUsers) {
         if (Objects.isNull(existingUsers)) {
             return writeLock();
         }
@@ -25,9 +24,6 @@ public class UserLoginChecker {
             return writeLock();
         }
 
-        //if userID is present, the Lock time stamp will also be present
-        //4800000 milliseconds equals to 1.5 hours.
-        // 3600000은 1시간
         final long timeDifference = ChronoUnit.HOURS.between(lockTimestamp, LocalDateTime.now());
         if (isFirstScreen && timeDifference > LOCK_FOR_THREE_HOURS) {
             return writeLock();
