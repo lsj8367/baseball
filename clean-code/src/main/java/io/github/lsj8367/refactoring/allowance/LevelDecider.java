@@ -18,19 +18,16 @@ public class LevelDecider {
 
         if (inputAllowance != null && fileVersionIdPrev != 0
             && allowance.getAllowanceId() != 0) {
-            BigDecimal allowancePrevVal = allowance.getAllowanceValue();
-            Log.debug("Previous Allowance value = # {0}", allowancePrevVal);
+            final BigDecimal allowancePrevVal = allowance.getPreviousValue();
 
             // calculate Allowance Diff
-            BigDecimal allowanceDiff = inputAllowance.subtract(allowancePrevVal);
-            Log.debug("Allowance Difference value = # {0}", allowanceDiff);
+            final BigDecimal allowanceDiff = allowance.valueDifference(inputAllowance);
 
             // calculate Allowance Diff Percentage
-
             final BigDecimal allowanceDiffPerc = calculateAllowanceDiffPercent(allowancePrevVal, allowanceDiff);
 
             // Get configured Allowance limit value & allowance difference percentage
-            if (allowancePrevVal != null && allowancePrevVal.doubleValue() != 0) {
+            if (allowance.validAllowance()) {
                 isAllowanceDiffPercLessConfig = allowanceDiffPerc
                     .compareTo(AllowanceConfig.PERCENT.getValue()) < 1;
             }
