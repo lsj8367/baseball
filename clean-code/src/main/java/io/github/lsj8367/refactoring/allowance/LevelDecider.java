@@ -1,68 +1,62 @@
 package io.github.lsj8367.refactoring.allowance;
 
-import io.github.lsj8367.refactoring.Log;
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Objects;
-
 
 public class LevelDecider {
 
-    public String determineLevel(final File fileVersion,
-        final long fileVersionIdPrev, final Allowance allowance, final BigDecimal inputAllowance) {
-        boolean isAllowanceDiffPercLessConfig = false;
+    private final File fileVersion;
+    private final long fileVersionIdPrev;
+    private final Allowance allowance;
+    private final BigDecimal inputAllowance;
 
-        if (fileVersion.isFileClosed()) {
+    public LevelDecider(final File fileVersion, final long fileVersionIdPrev, final Allowance allowance, final BigDecimal inputAllowance) {
+        this.fileVersion = fileVersion;
+        this.fileVersionIdPrev = fileVersionIdPrev;
+        this.allowance = allowance;
+        this.inputAllowance = inputAllowance;
+    }
+
+    public String determineLevel() {
+
+        if (isInitialValue()) {
             return Constants.LEVEL_D2;
         }
 
-        if (inputAllowance != null && fileVersionIdPrev != 0
-            && allowance.getAllowanceId() != 0) {
-            final BigDecimal allowancePrevVal = allowance.getPreviousValue();
+        allowance.previousValueLog();
 
-            // calculate Allowance Diff
-            final BigDecimal allowanceDiff = allowance.valueDifference(inputAllowance);
+        final BigDecimal allowanceDiff = allowance.valueDifference(inputAllowance);
+        final BigDecimal allowanceDiffPerc = allowance.calculateAllowanceDiffPercent(allowanceDiff);
 
-            // calculate Allowance Diff Percentage
-            final BigDecimal allowanceDiffPerc = calculateAllowanceDiffPercent(allowancePrevVal, allowanceDiff);
+        final AllowanceDiff diff = new AllowanceDiff(allowanceDiff, allowanceDiffPerc);
 
-            // Get configured Allowance limit value & allowance difference percentage
-            if (allowance.validAllowance()) {
-                isAllowanceDiffPercLessConfig = allowanceDiffPerc
-                    .compareTo(AllowanceConfig.PERCENT.getValue()) < 1;
-            }
+        final boolean isLessConfig = diff.isPercentLessConfig(allowance);
 
+        diff.differenceLog();
 
-
-            Log.logApplicationInfo(
-                "Allowance Diff : " + allowanceDiff.doubleValue(),
-                allowanceDiff, getClass());
-            Log.logApplicationInfo("Allowance Diff Perc : "
-                    + allowanceDiffPerc.doubleValue(), allowanceDiffPerc,
-                getClass());
-
-            if (allowanceDiff.abs().compareTo(AllowanceConfig.LIMIT.getValue()) < 1
-                || isAllowanceDiffPercLessConfig) {
-                return Constants.LEVEL_D1;
-            }
-
-            return Constants.LEVEL_D2;
+        if (diff.isMinusValue() || isLessConfig) {
+            return Constants.LEVEL_D1;
         }
 
-        // if prev file  or allowance for previous file
-        // does not exsits
-        // then  level is D2
+        // 이전 파일 또는 이전 파일에 대한 여유가 있는 경우
+        // 존재하지 않는다.
         return Constants.LEVEL_D2;
     }
 
-    private BigDecimal calculateAllowanceDiffPercent(final BigDecimal allowancePrevVal, final BigDecimal allowanceDiff) {
-        if (Objects.isNull(allowancePrevVal) || allowancePrevVal.doubleValue() == 0) {
-            return Constants.BIG_DECIMAL_ZERO;
+    private boolean isInitialValue() {
+        if (fileVersion.isFileClosed()) {
+            return true;
         }
 
-        return allowanceDiff.abs()
-            .divide(allowancePrevVal, 2, RoundingMode.HALF_UP)
-            .multiply(Constants.BIG_DECIMAL_HUNDRED);
+        if (Objects.isNull(inputAllowance)) {
+            return true;
+        }
+
+        if (fileVersionIdPrev == 0) {
+            return true;
+        }
+
+        return allowance.getAllowanceId() == 0;
     }
 
 }
