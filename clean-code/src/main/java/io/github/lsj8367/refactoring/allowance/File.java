@@ -12,4 +12,8 @@ public class File {
         this.prevFileVersionStatus = prevFileVersionStatus;
     }
 
+    public boolean isFileClosed() {
+        return Constants.LEVEL_D2.equals(prevFileVersionStatus);
+    }
+
 }
