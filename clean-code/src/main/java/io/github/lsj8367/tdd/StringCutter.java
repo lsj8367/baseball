@@ -23,4 +23,15 @@ public record StringCutter(String str) {
         final String back = str.substring(2);
         return front + back;
     }
+
+    public boolean isSameFirst2AndLast2() {
+        if (str.length() < 2) {
+            return false;
+        }
+
+        final String front = str.substring(0, 2);
+        final String back = str.substring(str.length() - 2);
+
+        return front.equals(back);
+    }
 }

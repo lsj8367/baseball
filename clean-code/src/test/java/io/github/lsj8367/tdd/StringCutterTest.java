@@ -9,10 +9,19 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 class StringCutterTest {
 
     @Test
+    @DisplayName("값 객체 비교")
+    void isSameObject() {
+        final StringCutter cutter = new StringCutter("");
+        assertThat(cutter).isEqualTo(new StringCutter(""));
+    }
+
+    @Test
+    @DisplayName("문자열에 null을 넣은 경우 예외")
     void strNullThenThrowException() {
         assertThatThrownBy(() -> new StringCutter(null))
             .isInstanceOf(IllegalArgumentException.class)
@@ -50,5 +59,28 @@ class StringCutterTest {
         final StringCutter stringCutter = new StringCutter("A");
 
         assertThat(stringCutter.removeAFirstTwoCharacter()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("문자열 길이가 2보다 작은 경우 무조건 false 반환")
+    void stringLengthLessThan2ThenReturnFalse() {
+        final StringCutter cutter = new StringCutter("A");
+        assertThat(cutter.isSameFirst2AndLast2()).isFalse();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"AAA", "AB", "ABCAB"})
+    @DisplayName("문자열 앞2글자 뒤2글자가 같으면 true")
+    void stringFront2Last2AreSameThenReturnTrue(final String str) {
+        final StringCutter cutter = new StringCutter(str);
+        assertThat(cutter.isSameFirst2AndLast2()).isTrue();
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"ABC", "ABCDEBA"})
+    @DisplayName("문자열 앞2글자 뒤2글자가 같으면 true")
+    void stringFront2Last2AreSameThenReturnFalse(final String str) {
+        final StringCutter cutter = new StringCutter(str);
+        assertThat(cutter.isSameFirst2AndLast2()).isFalse();
     }
 }
