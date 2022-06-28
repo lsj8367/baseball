@@ -1,62 +1,62 @@
 package io.github.lsj8367.refactoring.allowance;
 
-import io.github.lsj8367.refactoring.Log;
 import java.math.BigDecimal;
-
+import java.util.Objects;
 
 public class LevelDecider {
 
-    public String determineLevel(File fileVersion,
-        long fileVersionIdPrev,
-        Allowance allowance, BigDecimal allowanceVal) {
-        String Level = "";
-        boolean isAllowanceDiffPercLessConfig = false;
-        if (fileVersion.getPrevFileVersionStatus().equals(
-            Constants.FILE_STATUS_CLOSED)) {
-            Level = Constants.LEVEL_D2;
-        } else if (allowanceVal != null && fileVersionIdPrev != 0
-            && allowance.getAllowanceId() != 0) {
-            BigDecimal allowancePrevVal = allowance.getAllowanceValue();
-            Log.debug("Previous Allowance value = # {0}", allowancePrevVal);
-            // calculate Allowance Diff
-            BigDecimal allowanceDiff = allowanceVal.subtract(allowancePrevVal);
-            Log.debug("Allowance Difference value = # {0}", allowanceDiff);
-            Log.logApplicationDebug(" Level :" + Level,
-                getClass());
-            BigDecimal allowanceDiffPerc = Constants.BIG_DECIMAL_ZERO;
-            // Get configured Allowance limit value & allowance difference percentage
-            BigDecimal configuredDiffPerc = new BigDecimal(
-                Constants.CONFIGURATION_ALLOWANCE_PERCENT);
-            BigDecimal configuredDiffAmt = new BigDecimal(
-                Constants.CONFIGURATION_ALLOWANCE_LIMIT);
-            // calculate Allowance Diff Percentage
-            if (allowancePrevVal != null && allowancePrevVal.doubleValue() != 0) {
-                allowanceDiffPerc = allowanceDiff.abs()
-                    .divide(allowancePrevVal, 2, BigDecimal.ROUND_HALF_UP)
-                    .multiply(Constants.BIG_DECIMAL_HUNDRED);
-                isAllowanceDiffPercLessConfig = allowanceDiffPerc
-                    .compareTo(configuredDiffPerc) < 1;
-            }
+    private final File fileVersion;
+    private final long fileVersionIdPrev;
+    private final Allowance allowance;
+    private final BigDecimal inputAllowance;
 
-            Log.logApplicationInfo(
-                "Allowance Diff : " + allowanceDiff.doubleValue(),
-                allowanceDiff, getClass());
-            Log.logApplicationInfo("Allowance Diff Perc : "
-                    + allowanceDiffPerc.doubleValue(), allowanceDiffPerc,
-                getClass());
-            if (allowanceDiff.abs().compareTo(configuredDiffAmt) < 1
-                || isAllowanceDiffPercLessConfig) {
-                Level = Constants.LEVEL_D1;
-            } else {
-                Level = Constants.LEVEL_D2;
-            }
-        } else {
-            // if prev file  or allowance for previous file 
-            // does not exsits
-            // then  level is D2
-            Level = Constants.LEVEL_D2;
+    public LevelDecider(final File fileVersion, final long fileVersionIdPrev, final Allowance allowance, final BigDecimal inputAllowance) {
+        this.fileVersion = fileVersion;
+        this.fileVersionIdPrev = fileVersionIdPrev;
+        this.allowance = allowance;
+        this.inputAllowance = inputAllowance;
+    }
+
+    public String determineLevel() {
+
+        if (isInitialValue()) {
+            return Constants.LEVEL_D2;
         }
-        return Level;
+
+        allowance.previousValueLog();
+
+        final BigDecimal allowanceDiff = allowance.valueDifference(inputAllowance);
+        final BigDecimal allowanceDiffPerc = allowance.calculateAllowanceDiffPercent(allowanceDiff);
+
+        final AllowanceDiff diff = new AllowanceDiff(allowanceDiff, allowanceDiffPerc);
+
+        final boolean isLessConfig = diff.isPercentLessConfig(allowance);
+
+        diff.differenceLog();
+
+        if (diff.isMinusValue() || isLessConfig) {
+            return Constants.LEVEL_D1;
+        }
+
+        // 이전 파일 또는 이전 파일에 대한 여유가 있는 경우
+        // 존재하지 않는다.
+        return Constants.LEVEL_D2;
+    }
+
+    private boolean isInitialValue() {
+        if (fileVersion.isFileClosed()) {
+            return true;
+        }
+
+        if (Objects.isNull(inputAllowance)) {
+            return true;
+        }
+
+        if (fileVersionIdPrev == 0) {
+            return true;
+        }
+
+        return allowance.getAllowanceId() == 0;
     }
 
 }
