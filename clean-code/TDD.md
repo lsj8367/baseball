@@ -8,34 +8,34 @@
 
 - ""=>false, "A"=>false, "AB"=>true, "ABC"=>false, "AAA"=>true, "ABCAB"=>true, "ABCDEBA"=>false
 
-Hint : substring method.
+힌트 : substring method.
 
-### Bowling Kata
+### 볼링 Kata
 
-Popular kata popularized by Uncle Bob
+밥 아저씨가 대중화 한 인기 있는 코드 카타
 
 - http://butunclebob.com/ArticleS.UncleBob.TheBowlingGameKata
 
-- 10 Bowling Pins
-- Each Game has 10 frames
-- Each frame has upto 2 rolls
-    - Base score is sum of pins knocked down in 2 rolls
-- Bonus Points
-    - Spare
-        - You knock down all 10 pins in your 2 rolls
-        - You get double points for your next roll
-    - Strike
-        - You knock all 10 pins in your first roll
-        - You get double points for your next two rolls
-    - In 10th frame, you can have three rolls if you roll a Spare or a Strike
+- 10개의 볼링 핀
+- 각 게임에는 10개의 프레임이 있다.
+- 각 프레임에는 최대 2개의 롤이 있습니다.
+    - 기본 점수는 2개의 롤에서 넘어진 핀의 합계입니다.
+- 보너스 점수
+    - 스페어
+        - 2개의 롤에서 10개의 핀을 모두 쓰러뜨렸습니다.
+        - 다음 롤에 대해 두배의 점수를 얻게 됩니다.
+    - 스트라이크
+        - 첫 번째 롤에서 10개의 핀을 모두 쓰러뜨렸습니다.
+        - 다음 두 롤에대해 두배의 점수를 얻게 됩니다.
+    - 10번째 프레임에서 스페어 또는 스트라이크를 굴리면 3개의 롤을 할 수 있습니다.
 
-- Example 1 : 2,2|4,5|4,5|4,5|2,5
+- 예 1 : 2,2|4,5|4,5|4,5|2,5
     - Score = 2+2+4+5+4+5+4+5+2+5
-- Example 2 : 5,5|4,6|3, 7|6,4|1,1
+- 예 2 : 5,5|4,6|3, 7|6,4|1,1
     - Score = 5+9+4+9+3+13+6+5+1+1
-- Example 3 : 10|10|10|10|1,1
+- 예 3 : 10|10|10|10|1,1
     - Score = 30+30+21+12+2
 
-#### Design
+#### 디자인
 
-- Create a class Game with methods `void roll(int pins)` and `int score()`
+- `void roll(int pins)`, `int score()` 두개의 메소드를 사용하여 Game 클래스 만들기
