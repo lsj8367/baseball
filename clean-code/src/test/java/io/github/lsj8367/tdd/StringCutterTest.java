@@ -1,6 +1,7 @@
 package io.github.lsj8367.tdd;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,13 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 class StringCutterTest {
+
+    @Test
+    void strNullThenThrowException() {
+        assertThatThrownBy(() -> new StringCutter(null))
+            .isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("문자열은 null일 수 없습니다.");
+    }
 
     @ParameterizedTest
     @MethodSource

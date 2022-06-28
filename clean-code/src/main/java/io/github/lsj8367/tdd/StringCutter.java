@@ -1,9 +1,17 @@
 package io.github.lsj8367.tdd;
 
+import java.util.Objects;
+
 public record StringCutter(String str) {
 
     private static final String CUT_TARGET = "A";
     private static final String BLANK = "";
+
+    public StringCutter {
+        if (Objects.isNull(str)) {
+            throw new IllegalArgumentException("문자열은 null일 수 없습니다.");
+        }
+    }
 
     public String removeAFirstTwoCharacter() {
 
