@@ -8,7 +8,7 @@ public record StringCutter(String str) {
     public String removeAFirstTwoCharacter() {
 
         if (str.length() < 2) {
-            return str.replace("A", "");
+            return str.replace(CUT_TARGET, BLANK);
         }
 
         final String front = str.substring(0, 2).replace(CUT_TARGET, BLANK);
