@@ -1,4 +1,5 @@
 rootProject.name = 'code-kata'
 
 include 'baseball', 'member', 'clean-code', 'problems'
+include 'calculator'
 

@@ -16,8 +16,8 @@ subprojects {
 
     dependencies {
         testImplementation (
-                'org.junit.jupiter:junit-jupiter:5.8.2',
-                'org.assertj:assertj-core:3.22.0'
+                'org.junit.jupiter:junit-jupiter:5.9.0',
+                'org.assertj:assertj-core:3.23.0'
         )
     }
 
