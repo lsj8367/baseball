@@ -16,7 +16,7 @@ import util.HttpRequestUtils;
 public class RequestHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
 
-    private Socket connection;
+    private final Socket connection;
 
     public RequestHandler(Socket connectionSocket) {
         this.connection = connectionSocket;
@@ -60,9 +60,9 @@ public class RequestHandler implements Runnable {
 
     private static byte[] getBody(final String redirectPage) throws IOException {
         if ("/".equals(redirectPage)) {
-            return Files.readAllBytes(new File("./webapp/index.html").toPath());
+            return Files.readAllBytes(new File("./web-application-server/webapp/index.html").toPath());
         }
-        return Files.readAllBytes(new File("./webapp" + redirectPage).toPath());
+        return Files.readAllBytes(new File("./web-application-server/webapp" + redirectPage).toPath());
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
