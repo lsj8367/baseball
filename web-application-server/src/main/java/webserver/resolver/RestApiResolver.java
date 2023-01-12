@@ -16,6 +16,10 @@ public class RestApiResolver extends AbstractResolver {
         this.params = HttpRequestUtils.parseQueryString(paramString);
     }
 
+    public String getRequestPath() {
+        return requestPath;
+    }
+
     @Override
     public Map<String, String> getParams() {
         return params;
