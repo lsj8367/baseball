@@ -1,17 +1,17 @@
 package webserver;
 
+import controller.UserController;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
-import java.nio.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
+import webserver.resolver.RestApiResolver;
 
 public class RequestHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -27,42 +27,54 @@ public class RequestHandler implements Runnable {
         log.debug("New Client Connect! Connected IP : {}, Port : {}", connection.getInetAddress(),
                 connection.getPort());
 
-        try (InputStream in = connection.getInputStream(); OutputStream out = connection.getOutputStream()) {
+        try (
+            InputStream in = connection.getInputStream();
+            OutputStream out = connection.getOutputStream();
+            BufferedReader br = new BufferedReader(new InputStreamReader(in))
+        ) {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
+            final String requestUrl = br.readLine();
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            final String httpMethod = HttpRequestUtils.getHttpMethod(requestUrl);
 
-            String str = br.readLine();
+            final String url = HttpRequestUtils.splitUrlPath(requestUrl);
 
-            String redirectPage = HttpRequestUtils.splitUrlPath(str);
-
-            while((str = br.readLine()) != null) {
-                if (!"".equals(str)) {
-                    log.debug(str);
-                }
-
-                if (str.isBlank()) {
-                    break;
-                }
-            }
-
+            doLogRequestBody(br);
 
             DataOutputStream dos = new DataOutputStream(out);
 
-            byte[] body = getBody(redirectPage);
+            final ResolverFactory resolverFactory = new ResolverFactory(url);
+            final Resolver resolver = resolverFactory.resolver();
 
-            response200Header(dos, body.length);
-            responseBody(dos, body);
+            if (resolver instanceof RestApiResolver restApiResolver) {
+                //TODO request url HTTP method 와 url 분석
+                UserController userController = new UserController();
+                //해당 url을 처리할 수 있는 컨트롤러를 탐색함.
+                userController.signUp(restApiResolver.getRequestPath(), restApiResolver.getParams());
+                response200Header(dos, 0);
+                responseBody(dos, new byte[]{});
+            } else {
+                byte[] body = resolver.getFiles();
+                response200Header(dos, body.length);
+                responseBody(dos, body);
+            }
+
         } catch (IOException e) {
             log.error(e.getMessage());
         }
     }
 
-    private static byte[] getBody(final String redirectPage) throws IOException {
-        if ("/".equals(redirectPage)) {
-            return Files.readAllBytes(new File("./web-application-server/webapp/index.html").toPath());
+    private static void doLogRequestBody(final BufferedReader br) throws IOException {
+        String bodyData;
+        StringBuilder sb = new StringBuilder();
+        while((bodyData = br.readLine()) != null) {
+            sb.append(bodyData).append("\n");
+
+            if (bodyData.isBlank()) {
+                break;
+            }
         }
-        return Files.readAllBytes(new File("./web-application-server/webapp" + redirectPage).toPath());
+        log.info(sb.toString());
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
