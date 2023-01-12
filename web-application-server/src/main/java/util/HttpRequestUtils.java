@@ -53,6 +53,11 @@ public class HttpRequestUtils {
         return getKeyValue(header, ": ");
     }
 
+    public static String getHttpMethod(final String requestUrl) {
+        final String[] requestMethods = requestUrl.split(" ");
+        return requestMethods[0];
+    }
+
     public static String splitUrlPath(final String requestMethod) {
         final String[] requestMethods = requestMethod.split(" ");
         return requestMethods[1];
