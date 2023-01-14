@@ -1,17 +1,21 @@
 package webserver;
 
-import controller.UserController;
+import db.DataBase;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
+import java.nio.file.Files;
+import java.util.Map;
+import model.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import util.HttpRequestUtils;
-import webserver.resolver.RestApiResolver;
+import util.IOUtils;
 
 public class RequestHandler implements Runnable {
     private static final Logger log = LoggerFactory.getLogger(RequestHandler.class);
@@ -35,26 +39,28 @@ public class RequestHandler implements Runnable {
             // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             final String requestUrl = br.readLine();
 
-            final String httpMethod = HttpRequestUtils.getHttpMethod(requestUrl);
-
             final String url = HttpRequestUtils.splitUrlPath(requestUrl);
 
-            doLogRequestBody(br);
+            Content content = new Content(0);
+            logHeader(br, content);
 
-            DataOutputStream dos = new DataOutputStream(out);
+            //TODO request url HTTP method 와 url 분석
+            if ("/user/create".equals(url)) {
+                final String s = IOUtils.readData(br, content.getLength());
+                final Map<String, String> params = HttpRequestUtils.parseQueryString(s);
+                DataBase.addUser(new User(
+                    params.get("userId"),
+                    params.get("password"),
+                    params.get("name"),
+                    params.get("email"))
+                );
 
-            final ResolverFactory resolverFactory = new ResolverFactory(url);
-            final Resolver resolver = resolverFactory.resolver();
-
-            if (resolver instanceof RestApiResolver restApiResolver) {
-                //TODO request url HTTP method 와 url 분석
-                UserController userController = new UserController();
                 //해당 url을 처리할 수 있는 컨트롤러를 탐색함.
-                userController.signUp(restApiResolver.getRequestPath(), restApiResolver.getParams());
-                response200Header(dos, 0);
-                responseBody(dos, new byte[]{});
+                final User savedUser = DataBase.findUserById(params.get("userId"));
+                log.info("저장 완료 {}", savedUser);
             } else {
-                byte[] body = resolver.getFiles();
+                final DataOutputStream dos = new DataOutputStream(out);
+                byte[] body = Files.readAllBytes(new File("./web-application-server/webapp" + url).toPath());
                 response200Header(dos, body.length);
                 responseBody(dos, body);
             }
@@ -64,13 +70,17 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private static void doLogRequestBody(final BufferedReader br) throws IOException {
-        String bodyData;
+    private static void logHeader(final BufferedReader br, final Content content) throws IOException {
+        String header;
         StringBuilder sb = new StringBuilder();
-        while((bodyData = br.readLine()) != null) {
-            sb.append(bodyData).append("\n");
+        while((header = br.readLine()) != null) {
+            if (header.contains("Content-Length")) {
+                final String[] split = header.split(":");
+                content.setLength(Integer.parseInt(split[1].trim()));
+            }
+            sb.append(header).append("\n");
 
-            if (bodyData.isBlank()) {
+            if (header.isBlank()) {
                 break;
             }
         }
