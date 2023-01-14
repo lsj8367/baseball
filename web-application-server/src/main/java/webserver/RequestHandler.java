@@ -36,7 +36,6 @@ public class RequestHandler implements Runnable {
             OutputStream out = connection.getOutputStream();
             BufferedReader br = new BufferedReader(new InputStreamReader(in))
         ) {
-            // TODO 사용자 요청에 대한 처리는 이 곳에 구현하면 된다.
             final String requestUrl = br.readLine();
 
             final String url = HttpRequestUtils.splitUrlPath(requestUrl);
@@ -44,7 +43,6 @@ public class RequestHandler implements Runnable {
             Content content = new Content(0);
             logHeader(br, content);
 
-            //TODO request url HTTP method 와 url 분석
             if ("/user/create".equals(url)) {
                 final String s = IOUtils.readData(br, content.getLength());
                 final Map<String, String> params = HttpRequestUtils.parseQueryString(s);
