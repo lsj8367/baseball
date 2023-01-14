@@ -51,8 +51,6 @@ public class RequestHandler implements Runnable {
                 UserController userController = new UserController();
                 //해당 url을 처리할 수 있는 컨트롤러를 탐색함.
                 userController.signUp(restApiResolver.getRequestPath(), restApiResolver.getParams());
-                response200Header(dos, 0);
-                responseBody(dos, new byte[]{});
             } else {
                 byte[] body = resolver.getFiles();
                 response200Header(dos, body.length);
