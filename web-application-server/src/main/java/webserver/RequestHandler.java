@@ -56,6 +56,8 @@ public class RequestHandler implements Runnable {
                 //해당 url을 처리할 수 있는 컨트롤러를 탐색함.
                 final User savedUser = DataBase.findUserById(params.get("userId"));
                 log.info("저장 완료 {}", savedUser);
+                final DataOutputStream dos = new DataOutputStream(out);
+                response302Header(dos, "/index.html");
             } else {
                 final DataOutputStream dos = new DataOutputStream(out);
                 byte[] body = Files.readAllBytes(new File("./web-application-server/webapp" + url).toPath());
@@ -83,6 +85,16 @@ public class RequestHandler implements Runnable {
             }
         }
         log.info(sb.toString());
+    }
+
+    private void response302Header(final DataOutputStream dos, final String url) {
+        try {
+            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
+            dos.writeBytes("Location: " + url + "\r\n");
+            dos.writeBytes("\r\n");
+        } catch (IOException e) {
+            log.error(e.getMessage());
+        }
     }
 
     private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
