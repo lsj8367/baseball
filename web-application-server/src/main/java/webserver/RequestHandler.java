@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
             final String url = HttpRequestUtils.splitUrlPath(requestUrl);
 
             Content content = new Content(0);
-            logHeader(br, content);
+            Header.logHeader(br, content);
 
             final DataOutputStream dos = new DataOutputStream(out);
 
@@ -58,7 +58,7 @@ public class RequestHandler implements Runnable {
                 //해당 url을 처리할 수 있는 컨트롤러를 탐색함.
                 final User savedUser = DataBase.findUserById(params.get("userId"));
                 log.info("저장 완료 {}", savedUser);
-                response302Header(dos, "/index.html");
+                Header.response302Header(dos, "/index.html");
             } else if ("/user/login".equals(url)) {
                 final String body = IOUtils.readData(br, content.getLength());
                 final Map<String, String> params = HttpRequestUtils.parseQueryString(body);
@@ -66,12 +66,12 @@ public class RequestHandler implements Runnable {
                 final String password = params.get("password");
                 final User user = DataBase.findUserById(userId);
                 if (user == null || !password.equals(user.password())) {
-                    responseResources(dos, url);
+                    Header.responseResources(dos, url);
                 }
 
-                loginHeader(dos, "/index.html", true);
+                Header.loginHeader(dos, "/index.html", true);
             } else {
-                responseResources(dos, url);
+                Header.responseResources(dos, url);
             }
 
         } catch (IOException e) {
@@ -79,67 +79,4 @@ public class RequestHandler implements Runnable {
         }
     }
 
-    private void responseResources(final DataOutputStream dos, final String url) throws IOException {
-        byte[] body = Files.readAllBytes(new File("./web-application-server/webapp" + url).toPath());
-        response200Header(dos, body.length);
-        responseBody(dos, body);
-    }
-
-    private static void logHeader(final BufferedReader br, final Content content) throws IOException {
-        String header;
-        StringBuilder sb = new StringBuilder();
-        while((header = br.readLine()) != null) {
-            if (header.contains("Content-Length")) {
-                final String[] split = header.split(":");
-                content.setLength(Integer.parseInt(split[1].trim()));
-            }
-            sb.append(header).append("\n");
-
-            if (header.isBlank()) {
-                break;
-            }
-        }
-        log.info(sb.toString());
-    }
-
-    private void response302Header(final DataOutputStream dos, final String url) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
-            dos.writeBytes("Location: " + url + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void response200Header(DataOutputStream dos, int lengthOfBodyContent) {
-        try {
-            dos.writeBytes("HTTP/1.1 200 OK \r\n");
-            dos.writeBytes("Content-Type: text/html;charset=utf-8\r\n");
-            dos.writeBytes("Content-Length: " + lengthOfBodyContent + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void loginHeader(DataOutputStream dos, final String url, final boolean isLogin) {
-        try {
-            dos.writeBytes("HTTP/1.1 302 Redirect \r\n");
-            dos.writeBytes("Set-Cookie: logined=" + isLogin + "\r\n");
-            dos.writeBytes("Location : " + url + "\r\n");
-            dos.writeBytes("\r\n");
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
-
-    private void responseBody(DataOutputStream dos, byte[] body) {
-        try {
-            dos.write(body, 0, body.length);
-            dos.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-        }
-    }
 }
